@@ -9,10 +9,9 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-// ...
 import { updateInvoice, State } from '@/app/lib/actions';
 import { useActionState } from 'react';
- 
+
 export default function EditInvoiceForm({
   invoice,
   customers,
@@ -20,29 +19,20 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  // initial state for useActionState()
   const initialState: State = { message: null, errors: {} };
+
+  // bind invoice.id to the server action
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
+
+  // React action state handler
   const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
- 
-  return <form action={formAction}>{/* ... */}</form>;
-}
-
-export default function EditInvoiceForm({
-  invoice,
-  customers,
-}: {
-  invoice: InvoiceForm;
-  customers: CustomerField[];
-}) {
-
-  // Correct way: bind the invoice.id to your server action
-  const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
 
   return (
-    <form action={updateInvoiceWithId}>
+    <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         
-        {/* Customer Name */}
+        {/* CUSTOMER NAME */}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
             Choose customer
@@ -61,11 +51,12 @@ export default function EditInvoiceForm({
                 </option>
               ))}
             </select>
+
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
-        {/* Invoice Amount */}
+        {/* INVOICE AMOUNT */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
             Choose an amount
@@ -76,21 +67,25 @@ export default function EditInvoiceForm({
               name="amount"
               type="number"
               step="0.01"
-              defaultValue={invoice.amount}
               placeholder="Enter amount"
+              defaultValue={invoice.amount}
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2"
             />
+
             <CurrencyDollarIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
-        {/* Invoice Status */}
+        {/* INVOICE STATUS */}
         <fieldset>
           <legend className="mb-2 block text-sm font-medium">
             Set the invoice status
           </legend>
+
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
+
+              {/* PENDING */}
               <div className="flex items-center">
                 <input
                   id="pending"
@@ -105,6 +100,7 @@ export default function EditInvoiceForm({
                 </label>
               </div>
 
+              {/* PAID */}
               <div className="flex items-center">
                 <input
                   id="paid"
@@ -118,12 +114,14 @@ export default function EditInvoiceForm({
                   Paid <CheckIcon className="h-4 w-4" />
                 </label>
               </div>
+
             </div>
           </div>
+
         </fieldset>
       </div>
 
-      {/* Buttons */}
+      {/* BUTTONS */}
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href="/dashboard/invoices"
@@ -131,6 +129,7 @@ export default function EditInvoiceForm({
         >
           Cancel
         </Link>
+
         <Button type="submit">Edit Invoice</Button>
       </div>
     </form>
